@@ -50,6 +50,7 @@ class Snake(GameObject):
 
     def __init__(self, pos, size, color):
         GameObject.__init__(self, pos, size, color)
+        self.name = "corpo"
         self.velocity_x = 0
         self.velocity_y = 0
 
@@ -59,10 +60,13 @@ class Snake(GameObject):
         # self.pos =(self.x, self.y)
 
     def collision(self, list):
-        if any(bloco.pos == self.pos for bloco in list[:-1]):
-            return True
-        else:
-            return False
+        elements = len(list)
+        for x in range(1, elements):
+            if list[x].getPos() == self.getPos():
+                return True
+        return False
+
+
 
 class Apple(GameObject):
 

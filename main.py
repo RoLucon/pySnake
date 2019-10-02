@@ -12,14 +12,6 @@ p = pygame.init()
 pygame.display.set_caption("Snake")
 screen = pygame.display.set_mode(display_size)
 clock = pygame.time.Clock()
-teste = []
-teste.append(0)
-print(len(teste))
-teste.append(1)
-teste.append(2)
-e = len(teste)
-for x in range(e, 0, -1):
-    print(x)
 
 while gm.game_loop:
     # for event in pygame.event.get():
