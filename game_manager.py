@@ -17,4 +17,3 @@ class GameManager:
     def close_game(self):
         self.game_loop = False
 
-

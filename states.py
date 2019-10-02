@@ -2,6 +2,11 @@ import pygame
 from game_object import*
 from game_manager import GameManager
 
+WHITE = (255, 255, 255)
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+BLACK = (0, 0, 0)
 
 class GameStateManager:
 
@@ -18,10 +23,6 @@ class GameStateManager:
     def event(self):
         self.states[self.currentState].event()
 
-    def close_game(self):
-        gm = GameManager.instance()
-        gm.close_game()
-
 
 class Menu:
 
@@ -32,7 +33,7 @@ class Menu:
         self.name = ""
 
     def render(self, screen):
-        pygame.draw.rect(screen, (255,255,255), [40, 40, 10, 10])
+        pygame.draw.rect(screen, (WHITE), [40, 40, 10, 10])
 
     def event(self):
         for event in pygame.event.get():
@@ -43,8 +44,9 @@ class Menu:
 class LevelOne:
 
     def __init__(self):
+        self.gm = GameManager().instance()
         self.box = False
-        self.snake = Snake((50, 50), (10, 10), (255,0,0))
+        self.snake = Snake((50, 50), (10, 10), RED)
 
     def update(self):
         self.snake.update()
@@ -55,21 +57,21 @@ class LevelOne:
     def event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                GameStateManager.close_game(self)
+                self.gm.close_game()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    self.snake.velocity_y = -10
+                    self.snake.velocity_y = -self.gm.TITLE
                     self.snake.velocity_x = -0
                 elif event.key == pygame.K_RIGHT:
-                    self.snake.velocity_x = 10
+                    self.snake.velocity_x = self.gm.TITLE
                     self.snake.velocity_y = 0
                 elif event.key == pygame.K_DOWN:
-                    self.snake.velocity_y = 10
+                    self.snake.velocity_y = self.gm.TITLE
                     self.snake.velocity_x = 0
                 elif event.key == pygame.K_LEFT:
-                    self.snake.velocity_x = -10
+                    self.snake.velocity_x = -self.gm.TITLE
                     self.snake.velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
-                    GameStateManager.close_game(self)
+                    self.gm.close_game()
 
 
