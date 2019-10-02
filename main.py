@@ -13,7 +13,7 @@ pygame.display.set_caption("Snake")
 screen = pygame.display.set_mode(display_size)
 clock = pygame.time.Clock()
 
-while True:
+while gm.game_loop:
     # for event in pygame.event.get():
     #     if event.type == pygame.QUIT:
     #         pygame.quit()
@@ -22,7 +22,7 @@ while True:
     gsm.update()
     gsm.render(screen)
 
-    clock.tick(20)
+    clock.tick(gm.game_speed)
 
     pygame.display.update()
 

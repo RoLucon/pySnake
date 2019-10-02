@@ -1,6 +1,6 @@
 import pygame
 from game_object import*
-# from game_manager import GameManager
+from game_manager import GameManager
 
 
 class GameStateManager:
@@ -18,9 +18,9 @@ class GameStateManager:
     def event(self):
         self.states[self.currentState].event()
 
-    # def close_game(self):
-    #     gm = GameManager.instance()
-    #     gm.close_game()
+    def close_game(self):
+        gm = GameManager.instance()
+        gm.close_game()
 
 
 class Menu:
@@ -55,7 +55,7 @@ class LevelOne:
     def event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("metodo de fechar")
+                GameStateManager.close_game(self)
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     self.snake.velocity_y = -10
@@ -70,6 +70,6 @@ class LevelOne:
                     self.snake.velocity_x = -10
                     self.snake.velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
-                    print("metodo de fechar")
+                    GameStateManager.close_game(self)
 
 

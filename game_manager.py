@@ -15,6 +15,6 @@ class GameManager:
         self.game_speed = 20
 
     def close_game(self):
-        aux = self.game_speed
+        self.game_loop = False
 
 
