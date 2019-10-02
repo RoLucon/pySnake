@@ -84,16 +84,16 @@ class LevelOne:
             if event.type == pygame.QUIT:
                 gm.close_game()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
+                if event.key == pygame.K_UP and self.snake.velocity_y != gm.TILE:
                     self.snake.velocity_y = -gm.TILE
                     self.snake.velocity_x = -0
-                elif event.key == pygame.K_RIGHT:
+                elif event.key == pygame.K_RIGHT and self.snake.velocity_x != -gm.TILE:
                     self.snake.velocity_x = gm.TILE
                     self.snake.velocity_y = 0
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN and self.snake.velocity_y != -gm.TILE:
                     self.snake.velocity_y = gm.TILE
                     self.snake.velocity_x = 0
-                elif event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT and self.snake.velocity_x != gm.TILE:
                     self.snake.velocity_x = -gm.TILE
                     self.snake.velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
