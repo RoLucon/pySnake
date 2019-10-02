@@ -12,15 +12,14 @@ p = pygame.init()
 pygame.display.set_caption("Snake")
 screen = pygame.display.set_mode(display_size)
 clock = pygame.time.Clock()
+font = pygame.font.SysFont('arial', 25)
+
 
 while gm.game_loop:
-    # for event in pygame.event.get():
-    #     if event.type == pygame.QUIT:
-    #         pygame.quit()
-    screen.fill((0,0,0))
+    screen.fill((0, 0, 0))
     gsm.event()
     gsm.update()
-    gsm.render(screen)
+    gsm.render(screen, font)
 
     clock.tick(gm.game_speed)
 

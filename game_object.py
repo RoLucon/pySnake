@@ -1,4 +1,6 @@
 import random
+from game_manager import GameManager
+gm = GameManager.instance()
 
 
 class GameObject:
@@ -39,7 +41,6 @@ class Snake(GameObject):
 
     def __init__(self, pos, size, color):
         GameObject.__init__(self, pos, size, color)
-        self.name = "corpo"
         self.velocity_x = 0
         self.velocity_y = 0
 
@@ -62,8 +63,8 @@ class Apple(GameObject):
 
     def eaten(self, list, width, heigt):
         for i in list:
-            x = random.randint(self.width, (width / 10)) * 10
-            y = random.randint(self.heigth, (heigt / 10)) * 10
+            x = random.randint(0, ((gm.WIDTH - self.width) / 10)) * 10
+            y = random.randint(gm.OFFSET_TOP/10, ((gm.HEIGHT - self.heigth) / 10)) * 10
             if(i != (x, y)):
                 self.x = x
                 self.y = y
