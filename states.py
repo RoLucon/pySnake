@@ -57,7 +57,7 @@ class LevelOne:
         elements = len(self.list_snake)
         if elements > 1:
             for i in range(elements, 1, -1):
-                self.list_snake[i-1].pos = self.list_snake[i-2].pos
+                self.list_snake[i-1].setPos(self.list_snake[i-2].getPos())
 
         self.snake.update()
         if not self.box:
@@ -79,7 +79,7 @@ class LevelOne:
             elif self.snake.y < 0:
                 print("Morreu")
         if self.apple.x == self.list_snake[-1].x and self.apple.y == self.list_snake[-1].y:
-            self.list_snake.append(Snake(self.apple.pos, (gm.TILE, gm.TILE), GREEN))
+            self.list_snake.append(Snake(self.apple.getPos(), (gm.TILE, gm.TILE), GREEN))
             self.apple.tradeApple(gm.WIDTH, gm.HEIGHT)
 
         # if len(self.list_snake) > self.snake_len:
