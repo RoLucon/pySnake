@@ -1,6 +1,8 @@
 import pygame
+from game_manager import GameManager
+gm = GameManager.instance()
 
-display_size = (600, 400)
+display_size = (gm.WIDTH, gm.HEIGHT)
 
 game_loop = True
 game_speed = 25
