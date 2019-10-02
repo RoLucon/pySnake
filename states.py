@@ -7,7 +7,7 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 BLACK = (0, 0, 0)
-
+gm = GameManager.instance()
 
 class GameStateManager:
 
@@ -45,45 +45,58 @@ class Menu:
 class LevelOne:
 
     def __init__(self):
-        self.gm = GameManager().instance()
-        self.box = True
-        self.snake = Snake((50, 50), (10, 10), RED)
+        self.box = False
+        self.snake = Snake((50, 50), (gm.TILE, gm.TILE), GREEN)
+        self.apple = Apple((100, 100), (gm.TILE, gm.TILE), RED)
 
     def update(self):
         self.snake.update()
         if not self.box:
-            if self.snake.pos_x > self.gm.WIDTH:
+            if self.snake.pos_x > gm.WIDTH:
                 self.snake.pos_x = 0
             elif self.snake.pos_x < 0:
-                self.snake.pos_x = self.gm.WIDTH
-            if self.snake.pos_y > self.gm.HEIGHT:
+                self.snake.pos_x = gm.WIDTH
+            if self.snake.pos_y > gm.HEIGHT:
                 self.snake.pos_y = 0
             elif self.snake.pos_y < 0:
-                self.snake.pos_y = self.gm.HEIGHT
+                self.snake.pos_y = gm.HEIGHT
+        else:
+            if self.snake.pos_x > gm.WIDTH - gm.TILE:
+                print("Morreu")
+            elif self.snake.pos_x < gm.TILE:
+                print("Morreu")
+            if self.snake.pos_y > gm.HEIGHT:
+                print("Morreu")
+            elif self.snake.pos_y < 0:
+                print("Morreu")
 
     def render(self, screen):
-        pygame.draw.rect(screen, self.snake.color, [self.snake.pos_x, self.snake.pos_y, self.snake.width, self.snake.heigth])
+        pygame.draw.rect(screen, self.snake.color,
+                         [self.snake.pos_x, self.snake.pos_y, self.snake.width, self.snake.heigth])
+        pygame.draw.rect(screen, self.apple.color,
+                         [self.apple.pos_x, self.apple.pos_y, self.apple.width, self.apple.heigth])
+
         if self.box:
-            pygame.draw.rect(screen, WHITE, [0, 0, self.gm.WIDTH, self.gm.HEIGHT], self.gm.TILE)
+            pygame.draw.rect(screen, WHITE, [0, 0, gm.WIDTH, gm.HEIGHT], gm.TILE)
 
     def event(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                self.gm.close_game()
+                gm.close_game()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
-                    self.snake.velocity_y = -self.gm.TILE
+                    self.snake.velocity_y = -gm.TILE
                     self.snake.velocity_x = -0
                 elif event.key == pygame.K_RIGHT:
-                    self.snake.velocity_x = self.gm.TILE
+                    self.snake.velocity_x = gm.TILE
                     self.snake.velocity_y = 0
                 elif event.key == pygame.K_DOWN:
-                    self.snake.velocity_y = self.gm.TILE
+                    self.snake.velocity_y = gm.TILE
                     self.snake.velocity_x = 0
                 elif event.key == pygame.K_LEFT:
-                    self.snake.velocity_x = -self.gm.TILE
+                    self.snake.velocity_x = -gm.TILE
                     self.snake.velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
-                    self.gm.close_game()
+                    gm.close_game()
 
 

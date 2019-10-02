@@ -19,3 +19,9 @@ class Snake(GameObject):
     def update(self):
         self.pos_x += self.velocity_x
         self.pos_y += self.velocity_y
+
+
+class Apple(GameObject):
+
+    def __init__(self, pos, size, color):
+        GameObject.__init__(self, pos, size, color)
