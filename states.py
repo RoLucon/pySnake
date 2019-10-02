@@ -47,46 +47,51 @@ class LevelOne:
     def __init__(self):
         self.box = False
         self.list_snake = []
-        self.snake = Snake((50, 50), (gm.TILE, gm.TILE), GREEN)
+        self.snake = Snake((400, 300), (gm.TILE, gm.TILE), GREEN)
+        self.snake.velocity_x = 10
         self.list_snake.append(self.snake)
         self.apple = Apple((100, 100), (gm.TILE, gm.TILE), RED)
-        self.points = 20
+        self.snake_len = 1
 
     def update(self):
-        self.list_snake.append(Snake((self.snake.pos_x, self.snake.pos_y), (gm.TILE, gm.TILE), GREEN))
-        # for snake in self.list_snake:
-        #     self.snake.update()
+        elements = len(self.list_snake)
+        if elements > 1:
+            for i in range(elements, 1, -1):
+                self.list_snake[i-1].pos = self.list_snake[i-2].pos
+
         self.snake.update()
         if not self.box:
-            if self.snake.pos_x > gm.WIDTH:
-                self.snake.pos_x = 0
-            elif self.snake.pos_x < 0:
-                self.snake.pos_x = gm.WIDTH
-            if self.snake.pos_y > gm.HEIGHT:
-                self.snake.pos_y = 0
-            elif self.snake.pos_y < 0:
-                self.snake.pos_y = gm.HEIGHT
+            if self.snake.x > gm.WIDTH - gm.TILE:
+                self.snake.x = 0
+            elif self.snake.x < 0:
+                self.snake.x = gm.WIDTH
+            if self.snake.y > gm.HEIGHT - gm.TILE:
+                self.snake.y = 0
+            elif self.snake.y < 0:
+                self.snake.y = gm.HEIGHT
         else:
-            if self.snake.pos_x > gm.WIDTH - gm.TILE:
+            if self.snake.x > gm.WIDTH - gm.TILE:
                 print("Morreu")
-            elif self.snake.pos_x < gm.TILE:
+            elif self.snake.x < gm.TILE:
                 print("Morreu")
-            if self.snake.pos_y > gm.HEIGHT:
+            if self.snake.y > gm.HEIGHT:
                 print("Morreu")
-            elif self.snake.pos_y < 0:
+            elif self.snake.y < 0:
                 print("Morreu")
-        if self.apple.pos_x == self.snake.pos_x and self.apple.pos_y == self.snake.pos_y:
+        if self.apple.x == self.list_snake[-1].x and self.apple.y == self.list_snake[-1].y:
+            self.list_snake.append(Snake(self.apple.pos, (gm.TILE, gm.TILE), GREEN))
             self.apple.tradeApple(gm.WIDTH, gm.HEIGHT)
-            self.points += 1
-        if len(self.list_snake) > self.points:
-            del self.list_snake[0]
+
+        # if len(self.list_snake) > self.snake_len:
+        #     del self.list_snake[0]
+        # if self.snake.collision(self.list_snake):
+        #     print("Morreu")
 
     def render(self, screen):
-
         for snake in self.list_snake:
-            pygame.draw.rect(screen, snake.color, [snake.pos_x, snake.pos_y, snake.width, snake.heigth])
+            pygame.draw.rect(screen, snake.color, [snake.x, snake.y, snake.width, snake.heigth])
         pygame.draw.rect(screen, self.apple.color,
-                         [self.apple.pos_x, self.apple.pos_y, self.apple.width, self.apple.heigth])
+                         [self.apple.x, self.apple.y, self.apple.width, self.apple.heigth])
 
         if self.box:
             pygame.draw.rect(screen, WHITE, [0, 0, gm.WIDTH, gm.HEIGHT], gm.TILE)

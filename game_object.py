@@ -3,12 +3,40 @@ import random
 class GameObject:
 
     def __init__(self, pos, size, color):
-        self.pos_x = pos[0]
-        self.pos_y = pos[1]
+        self.pos = pos
+        self.x = pos[0]
+        self.y = pos[1]
         self.width = size[0]
         self.heigth = size[1]
         self.color = color
-        self.pivot = (self.pos_x - self.width / 2, self.pos_y - self.heigth / 2)
+        self.pivot = (self.x - self.width / 2, self.y - self.heigth / 2)
+
+    @property
+    def pos(self):
+        return self.__pos
+
+    @pos.setter
+    def pos(self, value):
+        self.__pos = value
+        self.x = value[0]
+        self.y = value[1]
+    # @property
+    # def x(self):
+    #     return self.__x
+    #
+    # @x.setter
+    # def x(self, value):
+    #     self.__x = value
+    #     self.pos =(self.x, self.y)
+    #
+    # @property
+    # def y(self):
+    #     return self.__y
+    #
+    # @y.setter
+    # def y(self, value):
+    #     self.__y = value
+    #     self.pos =(self.x, self.y)
 
 
 class Snake(GameObject):
@@ -19,9 +47,15 @@ class Snake(GameObject):
         self.velocity_y = 0
 
     def update(self):
-        self.pos_x += self.velocity_x
-        self.pos_y += self.velocity_y
+        self.x += self.velocity_x
+        self.y += self.velocity_y
+        self.pos =(self.x, self.y)
 
+    def collision(self, list):
+        if any(bloco.pos == self.pos for bloco in list[:-1]):
+            return True
+        else:
+            return False
 
 class Apple(GameObject):
 
@@ -29,5 +63,6 @@ class Apple(GameObject):
         GameObject.__init__(self, pos, size, color)
 
     def tradeApple(self, width, heigt):
-        self.pos_x = random.randint(self.width, (width / 10)) * 10
-        self.pos_y = random.randint(self.heigth, (heigt / 10)) * 10
+        self.x = random.randint(self.width, (width / 10)) * 10
+        self.y = random.randint(self.heigth, (heigt / 10)) * 10
+        self.pos = (self.x, self.y)
