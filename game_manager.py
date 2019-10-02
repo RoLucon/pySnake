@@ -12,7 +12,7 @@ class GameManager:
         self.HEIGHT = 400
         self.TILE = 10
         self.game_loop = True
-        self.game_speed = 10
+        self.game_speed = 15
 
     def close_game(self):
         self.game_loop = False

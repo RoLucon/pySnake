@@ -1,9 +1,9 @@
 import random
 
+
 class GameObject:
 
     def __init__(self, pos, size, color):
-        # self.pos = pos
         self.x = pos[0]
         self.y = pos[1]
         self.width = size[0]
@@ -11,21 +11,12 @@ class GameObject:
         self.color = color
         self.pivot = (self.x - self.width / 2, self.y - self.heigth / 2)
 
-    def getPos(self):
+    def getpos(self):
         return (self.x, self.y)
 
-    def setPos(self, value):
+    def setpos(self, value):
         self.x = value[0]
         self.y = value[1]
-    # @property
-    # def pos(self):
-    #     return self.__pos
-    #
-    # @pos.setter
-    # def pos(self, value):
-    #     self.__pos = value
-    #     self.x = value[0]
-    #     self.y = value[1]
 
     @property
     def x(self):
@@ -34,7 +25,6 @@ class GameObject:
     @x.setter
     def x(self, value):
         self.__x = value
-        # self.pos = (self.x, self.pos[1])
 
     @property
     def y(self):
@@ -43,7 +33,6 @@ class GameObject:
     @y.setter
     def y(self, value):
         self.__y = value
-    # self.pos = (self.pos[0], self.y)
 
 
 class Snake(GameObject):
@@ -57,15 +46,13 @@ class Snake(GameObject):
     def update(self):
         self.x += self.velocity_x
         self.y += self.velocity_y
-        # self.pos =(self.x, self.y)
 
     def collision(self, list):
         elements = len(list)
         for x in range(1, elements):
-            if list[x].getPos() == self.getPos():
+            if list[x].getpos() == self.getpos():
                 return True
         return False
-
 
 
 class Apple(GameObject):
@@ -73,7 +60,11 @@ class Apple(GameObject):
     def __init__(self, pos, size, color):
         GameObject.__init__(self, pos, size, color)
 
-    def tradeApple(self, width, heigt):
-        self.x = random.randint(self.width, (width / 10)) * 10
-        self.y = random.randint(self.heigth, (heigt / 10)) * 10
-        # self.pos = (self.x, self.y)
+    def eaten(self, list, width, heigt):
+        for i in list:
+            x = random.randint(self.width, (width / 10)) * 10
+            y = random.randint(self.heigth, (heigt / 10)) * 10
+            if(i != (x, y)):
+                self.x = x
+                self.y = y
+                break
