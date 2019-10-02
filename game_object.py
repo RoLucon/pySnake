@@ -1,3 +1,5 @@
+import random
+
 class GameObject:
 
     def __init__(self, pos, size, color):
@@ -25,3 +27,7 @@ class Apple(GameObject):
 
     def __init__(self, pos, size, color):
         GameObject.__init__(self, pos, size, color)
+
+    def tradeApple(self, width, heigt):
+        self.pos_x = random.randint(self.width, (width / 10)) * 10
+        self.pos_y = random.randint(self.heigth, (heigt / 10)) * 10

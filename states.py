@@ -46,33 +46,39 @@ class LevelOne:
 
     def __init__(self):
         self.box = False
-        self.snake = Snake((50, 50), (gm.TILE, gm.TILE), GREEN)
+        self.snake = []
+        self.snake.append(Snake((50, 50), (gm.TILE, gm.TILE), GREEN))
         self.apple = Apple((100, 100), (gm.TILE, gm.TILE), RED)
 
+
     def update(self):
-        self.snake.update()
+        for snake in self.snake:
+            snake.update()
         if not self.box:
-            if self.snake.pos_x > gm.WIDTH:
-                self.snake.pos_x = 0
-            elif self.snake.pos_x < 0:
-                self.snake.pos_x = gm.WIDTH
-            if self.snake.pos_y > gm.HEIGHT:
-                self.snake.pos_y = 0
-            elif self.snake.pos_y < 0:
-                self.snake.pos_y = gm.HEIGHT
+            if self.snake[0].pos_x > gm.WIDTH:
+                self.snake[0].pos_x = 0
+            elif self.snake[0].pos_x < 0:
+                self.snake[0].pos_x = gm.WIDTH
+            if self.snake[0].pos_y > gm.HEIGHT:
+                self.snake[0].pos_y = 0
+            elif self.snake[0].pos_y < 0:
+                self.snake[0].pos_y = gm.HEIGHT
         else:
-            if self.snake.pos_x > gm.WIDTH - gm.TILE:
+            if self.snake[0].pos_x > gm.WIDTH - gm.TILE:
                 print("Morreu")
-            elif self.snake.pos_x < gm.TILE:
+            elif self.snake[0].pos_x < gm.TILE:
                 print("Morreu")
-            if self.snake.pos_y > gm.HEIGHT:
+            if self.snake[0].pos_y > gm.HEIGHT:
                 print("Morreu")
-            elif self.snake.pos_y < 0:
+            elif self.snake[0].pos_y < 0:
                 print("Morreu")
+        if self.apple.pos_x == self.snake[0].pos_x and self.apple.pos_y == self.snake[0].pos_y:
+            self.apple.tradeApple(gm.WIDTH, gm.HEIGHT)
 
     def render(self, screen):
-        pygame.draw.rect(screen, self.snake.color,
-                         [self.snake.pos_x, self.snake.pos_y, self.snake.width, self.snake.heigth])
+
+        for snake in self.snake:
+            pygame.draw.rect(screen, snake.color, [snake.pos_x, snake.pos_y, snake.width, snake.heigth])
         pygame.draw.rect(screen, self.apple.color,
                          [self.apple.pos_x, self.apple.pos_y, self.apple.width, self.apple.heigth])
 
@@ -84,19 +90,17 @@ class LevelOne:
             if event.type == pygame.QUIT:
                 gm.close_game()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP and self.snake.velocity_y != gm.TILE:
-                    self.snake.velocity_y = -gm.TILE
-                    self.snake.velocity_x = -0
-                elif event.key == pygame.K_RIGHT and self.snake.velocity_x != -gm.TILE:
-                    self.snake.velocity_x = gm.TILE
-                    self.snake.velocity_y = 0
-                elif event.key == pygame.K_DOWN and self.snake.velocity_y != -gm.TILE:
-                    self.snake.velocity_y = gm.TILE
-                    self.snake.velocity_x = 0
-                elif event.key == pygame.K_LEFT and self.snake.velocity_x != gm.TILE:
-                    self.snake.velocity_x = -gm.TILE
-                    self.snake.velocity_y = 0
+                if event.key == pygame.K_UP and self.snake[0].velocity_y != gm.TILE:
+                    self.snake[0].velocity_y = -gm.TILE
+                    self.snake[0].velocity_x = -0
+                elif event.key == pygame.K_RIGHT and self.snake[0].velocity_x != -gm.TILE:
+                    self.snake[0].velocity_x = gm.TILE
+                    self.snake[0].velocity_y = 0
+                elif event.key == pygame.K_DOWN and self.snake[0].velocity_y != -gm.TILE:
+                    self.snake[0].velocity_y = gm.TILE
+                    self.snake[0].velocity_x = 0
+                elif event.key == pygame.K_LEFT and self.snake[0].velocity_x != gm.TILE:
+                    self.snake[0].velocity_x = -gm.TILE
+                    self.snake[0].velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
                     gm.close_game()
-
-
