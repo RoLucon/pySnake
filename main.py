@@ -3,7 +3,7 @@ from game_manager import GameManager
 from states import GameStateManager
 
 gm = GameManager.instance()
-gsm = GameStateManager()
+gsm = GameStateManager.instance()
 display_size = (gm.WIDTH, gm.HEIGHT)
 
 game_loop = True

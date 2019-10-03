@@ -3,19 +3,27 @@ from game_object import*
 from game_manager import GameManager
 
 WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+RED = (255, 128, 0)
+GREEN = (128, 255, 0)
+BLUE = (0, 128, 255)
 BLACK = (0, 0, 0)
 PURPLE = (128, 0, 255)
 gm = GameManager.instance()
 
 
 class GameStateManager:
+    __instance = None
 
     def __init__(self):
         self.currentState = 0
+        self.states = []
         self.states = [LevelOne()]
+
+    @staticmethod
+    def instance():
+        if not GameStateManager.__instance:
+            GameStateManager.__instance = GameStateManager()
+        return GameStateManager.__instance
 
     def update(self):
         self.states[self.currentState].update()
@@ -27,14 +35,31 @@ class GameStateManager:
     def event(self):
         self.states[self.currentState].event()
 
+    def change_state(self, name):
+        if name == "Menu":
+            self.states.append(Menu())
+            self.states.remove(self.states[self.currentState])
+        if name == "LevelOne":
+            self.states.append(LevelOne())
+            self.states.remove(self.states[self.currentState])
+
+    def pause(self, current_state):
+        self.states.append(Pause(current_state))
+        self.currentState = 1
+
+    def unpause(self):
+        self.currentState = 0
+        self.states.pop(1)
 
 class Menu:
 
     def __init__(self):
-        self.name = "menu"
+        self.name = "Menu"
+        pass
 
     def update(self):
-        self.name = ""
+        print("MENU")
+        pass
 
     def render(self, screen, font):
         pygame.draw.rect(screen, (WHITE), [40, 40, 10, 10])
@@ -114,7 +139,6 @@ class LevelOne:
                 gm.close_game()
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP and self.head.velocity_y != gm.TILE:
-                    self.apple.eaten(self.list_snake, gm.WIDTH, gm.HEIGHT)
                     self.head.velocity_y = -gm.TILE
                     self.head.velocity_x = -0
                 elif event.key == pygame.K_RIGHT and self.head.velocity_x != -gm.TILE:
@@ -127,4 +151,54 @@ class LevelOne:
                     self.head.velocity_x = -gm.TILE
                     self.head.velocity_y = 0
                 if event.key == pygame.K_ESCAPE:
-                    gm.close_game()
+                    gsm = GameStateManager.instance()
+                    gsm.pause(self)
+                    # gm.close_game()
+
+
+class GameOver:
+
+    def __init__(self):
+        pass
+
+    def update(self):
+        pass
+
+    def render(self, screen, font):
+        pygame.draw.rect(screen, WHITE, [40, 40, 10, 10])
+
+    def event(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                print("sair")
+
+
+class Pause:
+
+    def __init__(self, current_state):
+        self.current_state = current_state
+        pass
+
+    def update(self):
+        pass
+
+    # Ajustar posicionamentos com referencias da tela
+    def render(self, screen, font):
+        self.current_state.render(screen, font)
+        pygame.draw.rect(screen, BLUE, [gm.WIDTH / 4, gm.HEIGHT / 4, gm.WIDTH / 2, gm.HEIGHT / 2])
+        pause = font.render("Pausado", True, WHITE)
+        sair = font.render("Sair    Continuar", True, WHITE)
+        screen.blit(pause, [gm.WIDTH / 2 - 35, gm.HEIGHT / 3])
+        screen.blit(sair, [gm.WIDTH / 8 * 3, gm.HEIGHT / 3 * 2])
+
+    def event(self):
+        gsm = GameStateManager.instance()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE or event.key == pygame.K_c:
+                    gsm.unpause()
+                if event.key == pygame.K_s:
+                    gsm.change_state("Menu")
