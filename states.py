@@ -17,7 +17,7 @@ class GameStateManager:
     def __init__(self):
         self.currentState = 0
         self.states = []
-        self.states = [LevelOne()]
+        self.states = [Menu()]
 
     @staticmethod
     def instance():
@@ -54,20 +54,35 @@ class GameStateManager:
 class Menu:
 
     def __init__(self):
-        self.name = "Menu"
         pass
 
     def update(self):
-        print("MENU")
         pass
 
     def render(self, screen, font):
-        pygame.draw.rect(screen, (WHITE), [40, 40, 10, 10])
+        flag = False
+        for x in range(gm.OFFSET_TOP, gm.HEIGHT, gm.OFFSET_TOP):
+            if flag:
+                pygame.draw.rect(screen, PURPLE, [0, x, gm.WIDTH, gm.OFFSET_TOP])
+                flag = False
+            else:
+                flag = True
+        pause = font.render("pySnake", True, WHITE)
+        sair = font.render("Enter para jogar", True, WHITE)
+        screen.blit(pause, [gm.WIDTH / 2 - 35, gm.HEIGHT / 3 + 25])
+        screen.blit(sair, [gm.WIDTH / 8 * 3, gm.HEIGHT / 3 * 2 - 10])
 
     def event(self):
+        gsm = GameStateManager.instance()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print("sair")
+                pygame.quit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    pygame.quit()
+                if event.key == pygame.K_RETURN:
+                    gsm.change_state("LevelOne")
 
 
 class LevelOne:
@@ -80,8 +95,6 @@ class LevelOne:
         self.head.velocity_x = 10
         self.list_snake = []
         self.list_snake.append(self.head)
-        for x in range(10):
-            self.list_snake.append(Snake((400, 300 + 10 * x), (gm.TILE, gm.TILE), GREEN))
         self.apple = Apple((100, 100), (gm.TILE, gm.TILE), RED)
         self.snake_len = 1
 
