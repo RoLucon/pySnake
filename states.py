@@ -42,6 +42,9 @@ class GameStateManager:
         if name == "LevelOne":
             self.states.append(LevelOne())
             self.states.remove(self.states[self.currentState])
+        if name == "GameOver":
+            self.states.append(GameOver())
+            self.states.remove(self.states[self.currentState])
 
     def pause(self, current_state):
         self.states.append(Pause(current_state))
@@ -99,6 +102,7 @@ class LevelOne:
         self.snake_len = 1
 
     def update(self):
+        gsm = GameStateManager.instance()
         self.current_time = round(pygame.time.get_ticks() /1000 - self.init_time)
         elements = len(self.list_snake)
         if elements > 1:
@@ -117,13 +121,13 @@ class LevelOne:
                 self.head.y = gm.HEIGHT
         else:
             if self.head.x > gm.WIDTH - gm.TILE:
-                print("Batendo na parede")
+                gsm.change_state("GameOver")
             elif self.head.x < gm.TILE:
-                print("Batendo na parede")
+                gsm.change_state("GameOver")
             if self.head.y > gm.HEIGHT:
-                print("Batendo na parede")
+                gsm.change_state("GameOver")
             elif self.head.y < 0 + gm.OFFSET_TOP:
-                print("Batendo na parede")
+                gsm.change_state("GameOver")
         if self.apple.x == self.list_snake[-1].x and self.apple.y == self.list_snake[-1].y:
             self.list_snake.append(Snake(self.apple.getpos(), (gm.TILE, gm.TILE), GREEN))
             self.apple.eaten(self.list_snake, gm.WIDTH, gm.HEIGHT)
@@ -131,7 +135,7 @@ class LevelOne:
         # if len(self.list_snake) > self.snake_len:
         #     del self.list_snake[0]
         if self.head.collision(self.list_snake):
-            print("Colidindo com corpo")
+            gsm.change_state("GameOver")
 
     def render(self, screen, font):
         for snake in self.list_snake:
@@ -166,7 +170,6 @@ class LevelOne:
                 if event.key == pygame.K_ESCAPE:
                     gsm = GameStateManager.instance()
                     gsm.pause(self)
-                    # gm.close_game()
 
 
 class GameOver:
@@ -178,7 +181,9 @@ class GameOver:
         pass
 
     def render(self, screen, font):
-        pygame.draw.rect(screen, WHITE, [40, 40, 10, 10])
+        screen.fill(RED)
+        gameover = font.render("GAME OVER", True, WHITE)
+        screen.blit(gameover, [gm.WIDTH / 6, (gm.OFFSET_TOP / 2 - 25 / 2)])
 
     def event(self):
         for event in pygame.event.get():

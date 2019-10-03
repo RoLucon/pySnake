@@ -50,9 +50,10 @@ class Snake(GameObject):
 
     def collision(self, list):
         elements = len(list)
-        for x in range(1, elements):
-            if list[x].getpos() == self.getpos():
-                return True
+        if elements > 3:
+            for x in range(1, elements):
+                if list[x].getpos() == self.getpos():
+                    return True
         return False
 
 
